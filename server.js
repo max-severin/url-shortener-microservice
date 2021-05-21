@@ -50,11 +50,32 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.get('/', (req, res) => res.sendFile(`${__dirname}/view/index.html`));
 
+app.get('/api/shorturl/:shortUrl?', async (req, res) => {
+  try {
+    const currentUrl = await urlModel.findOne({
+      shortUrl: req.params.shortUrl
+    });
+
+    if (currentUrl) {
+      res.redirect(currentUrl.originalUrl);
+    } else {
+      res.status(404).json({
+        message: "URL Not Found" 
+      });
+    }
+  } catch(error) {
+    res.status(500).json({
+      error,
+      message: "Server Error",
+    });
+  }
+});
+
 app.post('/api/shorturl', async (req, res) => {
   const url = req.body.url.trim();
 
   if (!validUrl.isUri(url)) {
-    res.status(404).json({
+    res.status(400).json({
       message: "Invalid URL" 
     });
   } else {    
