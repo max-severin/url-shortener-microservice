@@ -10,7 +10,7 @@ Example:
 
 Example Usage:
 
-    [project_url]/api/shorturl/1
+    [project_url]/api/shorturl/_xbhS1xqP
 
 Will Redirect to:
 
