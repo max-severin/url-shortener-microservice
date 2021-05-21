@@ -60,13 +60,13 @@ app.get('/api/shorturl/:shortUrl?', async (req, res) => {
       res.redirect(currentUrl.originalUrl);
     } else {
       res.status(404).json({
-        message: "URL Not Found" 
+        error: "URL Not Found" 
       });
     }
   } catch(error) {
     res.status(500).json({
-      error,
       message: "Server Error",
+      error,
     });
   }
 });
@@ -74,9 +74,9 @@ app.get('/api/shorturl/:shortUrl?', async (req, res) => {
 app.post('/api/shorturl', async (req, res) => {
   const url = req.body.url.trim();
 
-  if (!validUrl.isUri(url)) {
-    res.status(400).json({
-      message: "Invalid URL" 
+  if (!validUrl.isWebUri(url)) {
+    res.json({
+      error: "invalid url" 
     });
   } else {    
     try {
@@ -86,8 +86,8 @@ app.post('/api/shorturl', async (req, res) => {
 
       if (existedOne) {       
         res.json({ 
-          originalUrl: existedOne.originalUrl,
-          shortUrl: existedOne.shortUrl,
+          original_url: existedOne.originalUrl,
+          short_url: existedOne.shortUrl,
         });
       } else {
         const shortUrl = shortId.generate();
@@ -100,8 +100,8 @@ app.post('/api/shorturl', async (req, res) => {
         await newOne.save();
 
         res.json({ 
-          originalUrl: newOne.originalUrl,
-          shortUrl: newOne.shortUrl,
+          original_url: newOne.originalUrl,
+          short_url: newOne.shortUrl,
         });
       }
 
