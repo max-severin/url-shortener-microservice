@@ -26,6 +26,15 @@ mongoose.connection.once('open', () => {
 	console.log('MongoDB database connection established successfully');
 });
 
+const { Schema } = mongoose;
+
+const urlSchema = new Schema({
+  originalUrl: { type: String, required: true },
+  shortUrl: { type: String, required: true }
+});
+
+const URL = mongoose.model('URL', urlSchema);
+
 //
 
 app.use(cors());
